@@ -3,28 +3,49 @@ $(document).ready(function() {
     const chartOptions = {
         legend: {
             display: true,
-            position: 'top',
+            position: 'right',
             labels: {
-                boxWidth: 80,
+                boxWidth: 40,
                 fontColor: 'black'
+            }
+        },
+        // Straight line instead of curved
+        elements: {
+            line: {
+                tension: 0
             }
         }
     };
     const makeChart = function(deploymentDiffs) {
-        var data = []
-        var labels = []
+        var buildData = [];
+        var deployData = [];
+        var totalData = [];
+        var labels = [];
         deploymentDiffs.forEach(d => {
-            data.push(d.timeToDeploy)
-            labels.push(d.deployStart)
+            buildData.push(d.timeToBuild);
+            deployData.push(d.timeToDeploy);
+            totalData.push(d.totalTime);
+            labels.push(d.deployStart);
         });
         var myChart = new Chart(canvas, {
             type: 'line',
             data: {
                 labels,
                 datasets: [{
-                    label: 'Time to deploy',
-                    data,
+                    label: 'Time to build',
+                    data: buildData,
                     fill: false,
+                    borderColor: 'green',
+                }, {
+                    label: 'Time to deploy',
+                    data: deployData,
+                    fill: false,
+                    borderColor: 'blue',
+                }, {
+                    label: 'Total time',
+                    data: totalData,
+                    fill: false,
+                    borderColor: 'orange ',
                 }],
             },
             options: chartOptions,
@@ -57,10 +78,10 @@ $(document).ready(function() {
         var rows = [];
         const deploymentDiffs = formatDeployments(data);
         $.each(deploymentDiffs, function(index, value) {
-            rows.push(`<tr><td>${index}</td><td>${value.timeToBuild}</td><td>${value.timeToDeploy}</td><td>${value.totalTime}</td><td><a href="${value.formattedLink}">${value.shortedSha}</a></td></tr>`)
+            rows.push(`<tr><th scope="row">${index}</th><td>${value.timeToBuild}</td><td>${value.timeToDeploy}</td><td>${value.totalTime}</td><td><a href="${value.formattedLink}">${value.shortedSha}</a></td></tr>`)
         });
         makeChart(deploymentDiffs);
-        $("#myTable").append('<tr><td>index</td><td>timeToBuild</td><td>timeToDeploy</td><td>totalTime</td><td>link</td></tr>')
-        $("#myTable").append(rows.join(""));
+        $("#myTable").append('<thead class="thead-light"><tr><th scope="col">index</th><th scope="col">timeToBuild</th><th scope="col">timeToDeploy</th><th scope="col">totalTime</th><th scope="col">link</th></tr></thead>')
+        $("#myTbody").append(rows.join(""));
     });
 });
