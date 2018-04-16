@@ -54,15 +54,13 @@ $(document).ready(function() {
         return deploymentDiffs;
     }
     $.getJSON("https://giggy-tracker-api-staging.aws.gigsternetwork.com/api/deployments", function(data) {
-        var items = [];
-        $.each(data, function(index, value) {
-            items.push("<li id='" + index + "'>" + value.name + "</li>");
+        var rows = [];
+        const deploymentDiffs = formatDeployments(data);
+        $.each(deploymentDiffs, function(index, value) {
+            rows.push(`<tr><td>${index}</td><td>${value.timeToBuild}</td><td>${value.timeToDeploy}</td><td>${value.totalTime}</td><td><a href="${value.formattedLink}">${value.shortedSha}</a></td></tr>`)
         });
-        const deploymentDiffs = formatDeployments(data)
         makeChart(deploymentDiffs);
-        $("<ul/>", {
-            "class": "my-new-list",
-            html: items.join("")
-        }).appendTo("body");
+        $("#myTable").append('<tr><td>index</td><td>timeToBuild</td><td>timeToDeploy</td><td>totalTime</td><td>link</td></tr>')
+        $("#myTable").append(rows.join(""));
     });
 });
