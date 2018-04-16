@@ -78,7 +78,7 @@ $(document).ready(function() {
         var rows = [];
         const deploymentDiffs = formatDeployments(data);
         $.each(deploymentDiffs, function(index, value) {
-            rows.push(`<tr><th scope="row">${index}</th><td>${value.timeToBuild}</td><td>${value.timeToDeploy}</td><td>${value.totalTime}</td><td><a href="${value.formattedLink}">${value.shortedSha}</a></td></tr>`)
+            rows.push(`<tr><th scope="row">${index}</th><td>${value.timeToBuild}</td><td>${value.timeToDeploy}</td><td>${value.totalTime}</td><td><a href="${value.formattedLink}" target="_blank">${value.shortedSha}</a></td></tr>`)
         });
         makeChart(deploymentDiffs);
         $("#myTable").append('<thead class="thead-light"><tr><th scope="col">index</th><th scope="col">timeToBuild</th><th scope="col">timeToDeploy</th><th scope="col">totalTime</th><th scope="col">link</th></tr></thead>')
