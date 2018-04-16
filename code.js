@@ -7,14 +7,12 @@ $(document).ready(function() {
             labels: {
                 boxWidth: 80,
                 fontColor: 'black'
-            },
-            fill: false,
+            }
         }
     };
     const makeChart = function(deploymentDiffs) {
         var data = []
         var labels = []
-        console.log(deploymentDiffs)
         deploymentDiffs.forEach(d => {
             data.push(d.timeToDeploy)
             labels.push(d.deployStart)
@@ -26,14 +24,17 @@ $(document).ready(function() {
                 datasets: [{
                     label: 'Time to deploy',
                     data,
+                    fill: false,
                 }],
             },
             options: chartOptions,
         });
         canvas.onclick = function(evt) {
-        	console.log(myChart)
-            var points = myChart.getPointsAtEvent(evt);
-            alert(chart.datasets[0].points.indexOf(points[0]));
+            var point = myChart.getElementsAtEvent(evt)[0];
+            if (point) {
+                var link = deploymentDiffs[point._index].formattedLink;
+                window.open(link);
+            }
         };
     }
     const formatDeployments = function(data) {
