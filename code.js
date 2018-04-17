@@ -14,6 +14,20 @@ $(document).ready(function() {
             line: {
                 tension: 0
             }
+        },
+        scales: {
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Time (s)'
+                }
+            }],
+            xAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Date'
+                }
+            }]
         }
     };
     const makeChart = function(deploymentDiffs) {
@@ -62,9 +76,10 @@ $(document).ready(function() {
         const deployments = data.filter(d => d.sellerId === 1)
         var deploymentDiffs = [];
         deployments.forEach(d => {
-            const timeToBuild = new Date(d.deployStart) - new Date(d.buildStart);
-            const timeToDeploy = new Date(d.deployFinish) - new Date(d.deployStart);
-            const totalTime = new Date(d.deployFinish) - new Date(d.buildStart);
+            // convert times to seconds
+            const timeToBuild = ~~(new Date(d.deployStart) - new Date(d.buildStart))/1000;
+            const timeToDeploy = ~~(new Date(d.deployFinish) - new Date(d.deployStart))/1000;
+            const totalTime = ~~(new Date(d.deployFinish) - new Date(d.buildStart))/1000;
             diffs = { timeToBuild, timeToDeploy, totalTime }
             const shortedSha = d.name.slice(0, 8);
             const formattedLink = `https://github.com/liquidlabs-co/gig/commit/${d.name}`
