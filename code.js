@@ -25,7 +25,7 @@ $(document).ready(function() {
             buildData.push(d.timeToBuild);
             deployData.push(d.timeToDeploy);
             totalData.push(d.totalTime);
-            labels.push(d.deployStart);
+            labels.push(d.deployStart.slice(0,10));
         });
         var myChart = new Chart(canvas, {
             type: 'line',
